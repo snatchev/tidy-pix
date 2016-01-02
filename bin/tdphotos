@@ -1,16 +1,19 @@
 #!/usr/bin/env ruby
 
 require 'thor'
-require 'these-damn-photos'
+require 'these_damn_photos'
 
 class TDPhotos < Thor
 
   option :storage
-  desc 'scan PATH for new photos'
+  desc 'scan PATH', 'scan PATH for new photos'
   def scan(path)
-    TheseDamnPhotos::Collector.storage_path = options[:storage]
+    TheseDamnPhotos::Collector.storage_root = options[:storage]
     scanner = TheseDamnPhotos::Scanner.new
-    scanner.scan(path)
+    scanner.scan(path) do |file, collector|
+      puts "\tadding #{file} to the collector"
+      collector.save(file)
+    end
   end
 end
 

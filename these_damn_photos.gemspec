@@ -21,5 +21,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'sqlite3', '~> 1.3.11'
   s.add_dependency 'thor'
   s.add_dependency 'ruby-filemagic', '~> 0.7.1'
-  s.add_development_dependency "minitest", "~> 5.2.2"
+  s.add_development_dependency 'minitest', '~> 5.2.2'
+  s.add_development_dependency 'pry'
 end
