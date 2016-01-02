@@ -1,6 +1,6 @@
 require 'find'
 
-module TheseDamnPhotos
+module TidyPix
   class Scanner
 
     def initialize

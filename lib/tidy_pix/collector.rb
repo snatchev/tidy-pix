@@ -3,7 +3,7 @@ require 'sequel'
 require 'phashion'
 require 'fileutils'
 
-module TheseDamnPhotos
+module TidyPix
   class Collector
     include Singleton
 
@@ -21,6 +21,7 @@ module TheseDamnPhotos
     def storage_path(file)
       path = File.join(storge_root, file.filename)
       if File.exist?(path)
+        raise NotImplementedError
       end
     end
 
@@ -84,7 +85,7 @@ module TheseDamnPhotos
       if dataset.all.empty?
         nil
       else
-        0
+        require 'pry'; binding.pry
       end
     end
   end

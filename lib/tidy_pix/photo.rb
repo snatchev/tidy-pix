@@ -1,7 +1,7 @@
 require 'exifr'
 require 'filemagic'
 
-module TheseDamnPhotos
+module TidyPix
   class Photo
 
     MIME = FileMagic.open(:mime)
@@ -59,6 +59,13 @@ module TheseDamnPhotos
 
     def self.create_schema!(database)
       database.run <<-SQL
+        CREATE TABLE schemas (
+          version INT DEFAULT 0,
+          created_at TEXT
+        );
+
+        INSERT INTO schemas VALUES (0, '#{Time.now}');
+
         CREATE TABLE photos (
           id      INT PRIMARY KEY ASC,
           md5     CHAR(32) UNIQUE NOT NULL,
@@ -69,7 +76,10 @@ module TheseDamnPhotos
           mime    TEXT,
           filename      TEXT,
           original_path TEXT
-        )
+        );
+
+        CREATE INDEX photos_md5 ON photos(md5);
+        CREATE INDEX photos_phash ON photos(phash1, phash2);
       SQL
     end
 
