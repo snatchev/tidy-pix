@@ -1,11 +1,14 @@
 require 'singleton'
+require 'sqlite3'
 require 'sequel'
 require 'phashion'
 require 'fileutils'
+require 'tidy_pix/logging'
 
 module TidyPix
   class Collector
     include Singleton
+    include Logging
 
     def self.storage_root=(path)
       @@storage_root = path
@@ -19,10 +22,12 @@ module TidyPix
     # returns a valid pathname
     #
     def storage_path(file)
-      path = File.join(storge_root, file.filename)
+      path = File.join(storage_root, file.filename)
       if File.exist?(path)
         raise NotImplementedError
       end
+
+      path
     end
 
     def initialize
@@ -68,10 +73,11 @@ module TidyPix
     end
 
     def copy_to_dest(file)
-      FileUtils.cp(file.path, storage_path(file))
+      FileUtils.cp(file.path, storage_path(file), preserve: true) #preserve timestamps
     end
 
     def save(file)
+      logger.info("saving: #{file.path}")
       insert(file) && copy_to_dest(file)
     end
 
@@ -81,11 +87,11 @@ module TidyPix
 
     #sqlite cannot store unsigned 64bit ints, so we must come up with this hack:
     def hamming_distances_from(file)
-      dataset = database['select id, hamming_distance(phash1, phash2, ?, ?) from photos', file.phash1, file.phash2]
+      dataset = database['select id, hamming_distance(phash1, phash2, ?, ?) as distance from photos', file.phash1, file.phash2]
       if dataset.all.empty?
         nil
       else
-        require 'pry'; binding.pry
+        dataset.first[:distance]
       end
     end
   end

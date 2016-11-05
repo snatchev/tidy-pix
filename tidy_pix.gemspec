@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'phashion', '~> 1.1.1'
   s.add_dependency 'exifr', '~> 1.2.3'
   s.add_dependency 'sequel', '~> 4.29.0'
-  s.add_dependency 'sqlite3', '~> 1.3.11'
+  s.add_dependency 'sqlite3', '~> 1.3.12'
   s.add_dependency 'thor'
   s.add_dependency 'ruby-filemagic', '~> 0.7.1'
   s.add_development_dependency 'rspec', '~> 3.4'

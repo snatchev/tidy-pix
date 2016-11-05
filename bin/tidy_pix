@@ -6,12 +6,12 @@ require 'tidy_pix'
 class TDPhotos < Thor
 
   option :storage
+
   desc 'scan PATH', 'scan PATH for new photos'
   def scan(path)
     TidyPix::Collector.storage_root = options[:storage]
     scanner = TidyPix::Scanner.new
     scanner.scan(path) do |file, collector|
-      puts "\tadding #{file} to the collector"
       collector.save(file)
     end
   end
